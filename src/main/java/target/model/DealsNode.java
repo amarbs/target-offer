@@ -1,5 +1,6 @@
 package target.model;
 
+import java.util.HashSet;
 import java.util.Set;
 
 public class DealsNode {
@@ -12,24 +13,30 @@ public class DealsNode {
     this.name = name;
   }
 
-  private Set<DealsNode> parents;
+  private int inhertiedDiscount = 0;
 
-  public Set<DealsNode> getParents() {
+  private Set<DealsNode> parents = new HashSet<DealsNode>();
+
+  private Set<DealsNode> getParents() {
     return parents;
   }
 
-  public void setParents(Set<DealsNode> parents) {
+  private void setParents(Set<DealsNode> parents) {
     this.parents = parents;
   }
 
+  private Set<DealsNode> children = new HashSet<DealsNode>();
+
   private int assignedDiscount;
 
-  public int getAssignedDiscount() {
+  private int getAssignedDiscount() {
     return assignedDiscount;
   }
 
-  public void setAssignedDiscount(int assignedDiscount) {
+  //TODO - for now cannot change assigned discount.
+  private void setAssignedDiscount(int assignedDiscount) {
     this.assignedDiscount = assignedDiscount;
+    //TODO propogate to descendents
   }
 
   private String name;
@@ -43,11 +50,23 @@ public class DealsNode {
   }
 
   public void addChild(DealsNode child) {
-    //TODO
+    if(! children.contains(child)) {
+      children.add(child);
+      child.addParent(this);
+    }
   }
 
-  public int finalDiscout() {
-    //TODO
-    return 0;
+  private void addParent(DealsNode parent) {
+    //TODO For now assume parent is not added when child present.
+    assert children.isEmpty();
+    if (!parents.contains(parent)) {
+      inhertiedDiscount += parent.finalDiscount();
+      parents.add(parent);
+      // TODO propogate to descendents
+    }
+  }
+
+  public int finalDiscount() {
+    return assignedDiscount + inhertiedDiscount;
   }
 }
