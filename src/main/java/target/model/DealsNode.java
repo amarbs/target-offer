@@ -59,8 +59,6 @@ public class DealsNode {
   }
 
   private void addParent(DealsNode parent) {
-    //TODO For now assume parent is not added when child present.
-    assert children.isEmpty();
     if (!parents.contains(parent)) {
       parents.add(parent);
       //since parent in newly added, preview inherited discount from this parent is 0
