@@ -33,10 +33,12 @@ public class DealsNode {
     return assignedDiscount;
   }
 
-  //TODO - for now cannot change assigned discount.
-  private void setAssignedDiscount(int assignedDiscount) {
+  public void setAssignedDiscount(int assignedDiscount) {
+    int prevFinDisc = finalDiscount();
     this.assignedDiscount = assignedDiscount;
-    //TODO propogate to descendents
+    for (DealsNode child: children) {
+      child.updateInherited(prevFinDisc, this);
+    }
   }
 
   private String name;
@@ -60,9 +62,18 @@ public class DealsNode {
     //TODO For now assume parent is not added when child present.
     assert children.isEmpty();
     if (!parents.contains(parent)) {
-      inhertiedDiscount += parent.finalDiscount();
       parents.add(parent);
-      // TODO propogate to descendents
+      //since parent in newly added, preview inherited discount from this parent is 0
+      updateInherited(0, parent);
+    }
+  }
+
+  private void updateInherited(int parentPreviousFinDisc, DealsNode parent) {
+    int prevFinDisc = finalDiscount();
+    inhertiedDiscount -= parentPreviousFinDisc;
+    inhertiedDiscount += parent.finalDiscount();
+    for (DealsNode child: children) {
+      child.updateInherited(prevFinDisc, this);
     }
   }
 
