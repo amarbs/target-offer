@@ -1,6 +1,6 @@
 # Promotions Evaluation
 
-Amarnath B S <amarbs@gmail.com>
+Amarnath B S (<amarbs@gmail.com>)
 
 ## Use-cases
 
